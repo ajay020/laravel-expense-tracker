@@ -13,9 +13,9 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = auth()->user()
-                    ->categories()
-                    ->latest()
-                    ->get();
+            ->categories()
+            ->latest()
+            ->get();
 
         return view('categories.index', compact('categories'));
     }
@@ -25,16 +25,16 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view ('categories.create');
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-  public function store(Request $request)
+    public function store(Request $request)
     {
         $attributes = $request->validate([
-            'name' => ['required', 'min:2']
+            'name' => ['required', 'min:2'],
         ]);
 
         auth()->user()
@@ -57,7 +57,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit', ['category' => $category]);
     }
 
     /**
@@ -65,7 +65,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $attributes = $request->validate([
+            'name' => ['required', 'min:2'],
+        ]);
+
+        $category->update($attributes);
+
+        return redirect('/categories');
     }
 
     /**
@@ -73,6 +79,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        // 
+        abort_if($category->user_id !== auth()->id(), 403);
+
+        $category->delete();
+
+        return redirect('/categories');
     }
 }

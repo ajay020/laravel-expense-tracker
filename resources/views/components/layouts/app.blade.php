@@ -14,13 +14,18 @@
 
     <nav class="bg-white shadow p-4">
         <div class="max-w-4xl mx-auto flex justify-between">
-            <a href="/">
+            <a href="/expenses">
                 Expense Tracker
             </a>
 
             <div class="flex gap-4">
 
                 @auth
+
+                    <a href="{{ route('expenses.create')  }}" class="bg-black text-white rounded px-2 py-1">
+                        Add Expense +
+                    </a>
+
                     <span>
                         Hello {{ auth()->user()->name }}
                     </span>

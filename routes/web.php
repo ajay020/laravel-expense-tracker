@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,6 +24,8 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [SessionController::class, 'destroy'])
     ->middleware('auth');
 
+Route::resource('categories', CategoryController::class)
+    ->middleware('auth');
 
- Route::resource('categories', CategoryController::class)
-    ->middleware('auth');   
+Route::resource('expenses', ExpenseController::class)
+    ->middleware('auth');

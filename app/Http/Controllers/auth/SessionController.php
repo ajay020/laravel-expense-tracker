@@ -23,7 +23,7 @@ class SessionController extends Controller
         if (! Auth::attempt($attributes)) {
             return back()
                 ->withErrors([
-                    'email' => 'Invalid credentials.'
+                    'email' => 'Invalid credentials.',
                 ])
                 ->onlyInput('email');
         }
