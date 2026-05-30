@@ -62,6 +62,7 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
+        
         return view('expenses.show', [
             'expense' => $expense,
         ]);
@@ -72,6 +73,8 @@ class ExpenseController extends Controller
      */
     public function edit(Expense $expense)
     {
+        $this->authorize('update', $expense);
+
         $categories = auth()->user()->categories()->get();
 
         return view('expenses.edit', [
@@ -103,6 +106,8 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
+        $this->authorize('delete', $expense);
+
         $expense->delete();
 
         return redirect('/expenses');
