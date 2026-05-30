@@ -16,7 +16,7 @@ class ExpenseController extends Controller
             ->expenses()
             ->with('category')
             ->latest()
-            ->get();
+            ->paginate(4);
 
         return view('expenses.index', [
             'expenses' => $expenses,
@@ -62,7 +62,6 @@ class ExpenseController extends Controller
      */
     public function show(Expense $expense)
     {
-        
         return view('expenses.show', [
             'expense' => $expense,
         ]);
