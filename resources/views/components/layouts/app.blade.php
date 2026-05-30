@@ -57,6 +57,15 @@
     </nav>
 
     <main class="max-w-4xl mx-auto p-6">
+
+        <x-flash-message :type="'success'">
+            {{ session('success') }}
+        </x-flash-message>
+
+        <x-flash-message :type="'error'">
+            {{ session('error') }}
+        </x-flash-message>
+
         {{ $slot }}
     </main>
 

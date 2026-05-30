@@ -88,7 +88,7 @@ class ExpenseController extends Controller
             ->expenses()
             ->create($attributes);
 
-        return redirect('/expenses');
+        return redirect('/expenses')->with('success', 'Expense created successfully!');
     }
 
     /**
@@ -131,7 +131,7 @@ class ExpenseController extends Controller
 
         $expense->update($attributes);
 
-        return redirect('/expenses');
+        return redirect('/expenses')->with('success', 'Expense updated successfully!');
     }
 
     /**
@@ -143,6 +143,6 @@ class ExpenseController extends Controller
 
         $expense->delete();
 
-        return redirect('/expenses');
+        return redirect('/expenses')->with('success', 'Expense deleted successfully!');
     }
 }
