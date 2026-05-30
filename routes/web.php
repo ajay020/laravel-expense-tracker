@@ -3,11 +3,14 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+
     return view('dashboard');
+
 })->middleware('auth');
 
 Route::middleware('guest')->group(function () {
@@ -28,4 +31,7 @@ Route::resource('categories', CategoryController::class)
     ->middleware('auth');
 
 Route::resource('expenses', ExpenseController::class)
+    ->middleware('auth');
+
+Route::get('/', [DashboardController::class, 'index'])
     ->middleware('auth');
