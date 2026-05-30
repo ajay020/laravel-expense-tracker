@@ -12,14 +12,48 @@ class ExpenseController extends Controller
      */
     public function index()
     {
+
+        $search = request("search");
+     
+
         $expenses = auth()->user()
             ->expenses()
+            ->orderBy('created_at','desc')
             ->with('category')
+            ->when($search, function ($query, $search) {
+                $query->where('title','like','%'. $search .'%');
+            })
+            ->when(
+                request('category'),
+                fn ($query, $categoryId) =>
+                    $query->where('category_id', $categoryId))
+            ->when(
+                request('month'),
+                fn ($query, $month) =>
+                    $query->whereMonth('expense_date', $month)
+            )
+            ->when(
+                request('start_date'),
+                fn ($query, $date) =>
+                $query->whereDate('expense_date', '>=', $date)
+            )
+            ->when(
+                request('end_date'),
+                fn ($query, $date) =>
+                    $query->whereDate('expense_date', '<=', $date)
+            )
             ->latest()
-            ->paginate(4);
+            ->paginate(4)
+            ->withQueryString();
+
+        $categories = auth()->user()
+            ->categories()
+            ->orderBy('name')
+            ->get();
 
         return view('expenses.index', [
             'expenses' => $expenses,
+            'categories' => $categories,
         ]);
     }
 
