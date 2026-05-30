@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 
@@ -74,21 +76,14 @@ class ExpenseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+  public function store(StoreExpenseRequest $request)
     {
-        $attributes = $request->validate([
-            'title' => ['required', 'min:2'],
-            'amount' => ['required', 'numeric', 'min:0'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'expense_date' => ['required', 'date'],
-            'note' => ['nullable'],
-        ]);
-
         auth()->user()
             ->expenses()
-            ->create($attributes);
+            ->create($request->validated());
 
-        return redirect('/expenses')->with('success', 'Expense created successfully!');
+        return redirect('/expenses')
+            ->with('success', 'Expense created successfully!');
     }
 
     /**
@@ -119,17 +114,9 @@ class ExpenseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Expense $expense)
+    public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        $attributes = $request->validate([
-            'title' => ['required', 'min:2'],
-            'amount' => ['required', 'numeric', 'min:0'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'expense_date' => ['required', 'date'],
-            'note' => ['nullable'],
-        ]);
-
-        $expense->update($attributes);
+        $expense->update($request->validated());
 
         return redirect('/expenses')->with('success', 'Expense updated successfully!');
     }
