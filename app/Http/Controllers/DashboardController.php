@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 class DashboardController extends Controller
 {
-
     private $monthNames = [
             '01' => 'Jan',
             '02' => 'Feb',
@@ -19,10 +18,8 @@ class DashboardController extends Controller
             '10' => 'Oct',
             '11' => 'Nov',
             '12' => 'Dec',
-        ];
-  
-
-
+    ];
+    
     public function index()
     {
         $user = auth()->user();
