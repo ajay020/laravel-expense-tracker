@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Expense;
+use App\Models\Category;
 use App\Models\User;
 
-class ExpensePolicy
+class CategoryPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -18,7 +18,7 @@ class ExpensePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Expense $expense): bool
+    public function view(User $user, Category $category): bool
     {
         return false;
     }
@@ -34,23 +34,23 @@ class ExpensePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Expense $expense): bool
+    public function update(User $user, Category $category): bool
     {
-        return $user->id === $expense->user_id;
+        return $user->id === $category->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Expense $expense): bool
+    public function delete(User $user, Category $category): bool
     {
-        return $user->id === $expense->user_id;
+        return $user->id === $category->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Expense $expense): bool
+    public function restore(User $user, Category $category): bool
     {
         return false;
     }
@@ -58,7 +58,7 @@ class ExpensePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Expense $expense): bool
+    public function forceDelete(User $user, Category $category): bool
     {
         return false;
     }

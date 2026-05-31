@@ -14,9 +14,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-
         $search = request("search");
-     
 
         $expenses = auth()->user()
             ->expenses()

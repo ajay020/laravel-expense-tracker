@@ -57,6 +57,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('update', $category);
+
         return view('categories.edit', ['category' => $category]);
     }
 
@@ -79,7 +81,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        abort_if($category->user_id !== auth()->id(), 403);
+        $this->authorize('delete', $category);
 
         $category->delete();
 
