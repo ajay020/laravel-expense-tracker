@@ -84,40 +84,63 @@
         </form>
     </div>
 
-
     @if ($expenses->isEmpty())
         <p>No expenses</p>
 
     @else
-        <div class="bg-gray-300 p-4 mb-4">
+        <div class=" mb-4">
 
             @foreach($expenses as $expense)
-                <div class="bg-gray-100 p-4 mb-4">
+               <div class="bg-white border rounded-lg p-4 shadow-sm mb-4">
 
-                    <h2>{{ $expense->title }}</h2>
+                    <div class="flex items-start justify-between">
 
-                    <p>₹{{ $expense->amount }}</p>
+                        <div>
+                            <h2 class="text-lg font-semibold">
+                                {{ $expense->title }}
+                            </h2>
 
-                    <p>{{ $expense->category->name }}</p>
+                            <div class="flex items-center gap-3 mt-1">
 
-                    <p>{{ $expense->expense_date }}</p>
+                                <span class="text-sm px-2 py-1 bg-gray-100 rounded-full">
+                                    {{ $expense->category->name }}
+                                </span>
 
-                    <a href="{{ route('expenses.edit', $expense) }}" class="px-2">Edit</a>
-                    <form action="{{ route('expenses.destroy', $expense) }}" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500">Delete</button>
-                    </form>
+                                <span class="text-sm text-gray-500">
+                                    {{ \Carbon\Carbon::parse($expense->expense_date)->format('d M Y') }}
+                                </span>
+
+                            </div>
+
+                            @if($expense->note)
+                                <p class="text-sm text-gray-600 mt-2">
+                                    {{ $expense->note }}
+                                </p>
+                            @endif
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-xl font-bold">
+                                ₹{{ number_format($expense->amount, 2) }}
+                            </p>
+
+                            <x-action-buttons
+                                :edit-route="route('expenses.edit', $expense)"
+                                :delete-route="route('expenses.destroy', $expense)"
+                            />
+
+                        </div>
+
+                    </div>
 
                 </div>
             @endforeach
 
             <div class="p-4">
-                {{-- {{ $expenses->links() }} --}}
                 {{ $expenses->withQueryString()->links() }}
             </div>
 
         </div>
-
     @endif
 </x-layouts.app>

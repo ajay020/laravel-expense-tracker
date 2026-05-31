@@ -12,12 +12,10 @@
                 <li class="flex justify-between items-center bg-gray-100 p-4 rounded">
                     <span>{{ $category->name }}</span>
                     <div>
-                        <a href="{{ route('categories.edit', $category) }}" class="text-blue-500 mr-2">Edit</a>
-                        <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500">Delete</button>
-                        </form>
+                        <x-action-buttons
+                            :edit-route="route('categories.edit', $category)"
+                            :delete-route="route('categories.destroy', $category)"
+                        />
                     </div>
                 </li>
             @endforeach
