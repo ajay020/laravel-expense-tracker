@@ -1,9 +1,28 @@
 <?php
 
 namespace App\Http\Controllers;
+  
 
 class DashboardController extends Controller
 {
+
+    private $monthNames = [
+            '01' => 'Jan',
+            '02' => 'Feb',
+            '03' => 'Mar',
+            '04' => 'Apr',
+            '05' => 'May',
+            '06' => 'Jun',
+            '07' => 'Jul',
+            '08' => 'Aug',
+            '09' => 'Sep',
+            '10' => 'Oct',
+            '11' => 'Nov',
+            '12' => 'Dec',
+        ];
+  
+
+
     public function index()
     {
         $user = auth()->user();
@@ -29,6 +48,24 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+
+        $monthlySpending = auth()->user()
+            ->expenses()
+            ->selectRaw('strftime("%m", expense_date) as month')
+            ->selectRaw('SUM(amount) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $labels = $monthlySpending
+            ->pluck('month')
+            ->map(fn ($month) => $this->monthNames[$month]);
+
+        $values = $monthlySpending
+            ->pluck('total');
+
+        // dump($labels, $values);
+
         $topCategories = auth()->user()
             ->categories()
             ->select('categories.id', 'categories.name')
@@ -46,6 +83,8 @@ class DashboardController extends Controller
             'totalCategories' => $totalCategories,
             'recentExpenses' => $recentExpenses,
             'topCategories' => $topCategories,
+            'labels' => $labels,
+            'values' => $values,
         ]);
     }
 }
