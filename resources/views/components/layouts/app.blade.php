@@ -55,8 +55,6 @@
                 </div>
 
                 <div 
-                   x-data="{ open: false }"
-                    @click="open = !open"
                     class="flex items-center gap-4 cursor-pointer"
                 >
                     @auth
@@ -64,7 +62,11 @@
                             <x-round-plus-icon size="6" />
                         </a>
 
-                        <div class="relative">
+                        <div
+                            x-data="{ open: false }"
+                            @click="open = !open"
+                            class="relative"
+                        >
                             <div class="flex items-center gap-2">
 
                                 <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
