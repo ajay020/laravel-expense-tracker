@@ -1,88 +1,150 @@
 <x-layouts.app title="Expenses">
 
-    <form method="GET" action="{{ route('expenses.index') }}" class="mb-4">
+    <div
+        x-data="{
+            open: {{ request()->hasAny([
+                'search',
+                'category',
+                'month',
+                'start_date',
+                'end_date'
+            ]) ? 'true' : 'false' }}
+        }"
+        class="mb-4"
+    >
+        <button
+            @click="open = !open"
+            class=" inline-flex items-center gap-2 rounded px-1 py-1 cursor-pointer"
+        >
+            <span x-text="open ? 'Hide Filters' : 'Show Filters'"></span>
 
-        {{-- filter by category --}}
-        <select name="category">
+            <svg
+                :class="{ 'rotate-180': open }"
+                class="size-5 transition-transform"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+            </svg>
 
-            <option value="">
-                All Categories
-            </option>
-
-            @foreach($categories as $category)
-
-                <option value="{{ $category->id }}" @selected(request('category') == $category->id)>
-                    {{ $category->name }}
-                </option>
-
-            @endforeach
-
-        </select>
-
-        {{-- filter by month --}}
-
-        <select name="month">
-            <option value="">All Months</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-
-        </select>
-
-        <button type="submit" class=" px-2 bg-blue-500 text-white rounded">
-            Filter
         </button>
 
-    </form>
-
-    {{-- search by title --}}
-    <form action="{{ route('expenses.index') }}" method="GET" class="mb-4 flex items-center gap-2">
-        <input
-            type="text"
-            name="search"
-            placeholder="Search expenses by title..." 
-            value="{{ request('search') }}"
-            class="px-2 py-1 border rounded flex-1"
+        <div
+            x-show="open"
+            x-transition
         >
-        <button type="submit" class="px-2 py-1 cursor-pointer bg-green-500 text-white rounded">Search</button>
-    </form>
+            <div class="bg-white border rounded-lg p-4 shadow-sm mb-6">
 
-    {{-- filter by date range --}}
-    <div class="mb-4">
-        <form action="{{ route('expenses.index') }}" method="GET" class="flex items-center gap-2">
-            <label for="from" class="mr-2">From:</label>
-            <input 
-                type="date"
-                name="start_date"
-                id="from" 
-                value="{{ request('start_date') }}" 
-                class="px-2 py-1 border rounded"
-              >
-            <label for="to" class="mr-2">To:</label>
-            <input
-                 type="date"
-                 name="end_date" 
-                 id="to"
-                 value="{{ request('end_date') }}"
-                 class="px-2 py-1 border rounded"
-            >
-            <button 
-                type="submit"
-                 class="px-2 py-1 cursor-pointer bg-purple-500 text-white rounded"
-             >
-             Filter
-            </button>
-        </form>
+                <h2 class="font-semibold mb-4">
+                    Filters
+                </h2>
+
+                <form method="GET" action="{{ route('expenses.index') }}">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search by title..."
+                            value="{{ request('search') }}"
+                            class="border rounded px-3 py-2"
+                        >
+
+                        <select
+                            name="category"
+                            class="border rounded px-3 py-2"
+                        >
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            @foreach($categories as $category)
+                                <option
+                                    value="{{ $category->id }}"
+                                    @selected(request('category') == $category->id)
+                                >
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <select
+                            name="month"
+                            class="border rounded px-3 py-2"
+                        >
+                            <option value="">
+                                All Months
+                            </option>
+
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            ...
+                        </select>
+
+                        <input
+                            type="date"
+                            name="start_date"
+                            value="{{ request('start_date') }}"
+                            class="border rounded px-3 py-2"
+                        >
+
+                        <input
+                            type="date"
+                            name="end_date"
+                            value="{{ request('end_date') }}"
+                            class="border rounded px-3 py-2"
+                        >
+
+                    </div>
+
+                    <div class="flex gap-3 mt-4">
+
+                        <button
+                            type="submit"
+                            class="bg-black text-white px-4 py-2 rounded"
+                        >
+                            Apply Filters
+                        </button>
+
+                        <a
+
+                            href="{{ route('expenses.index') }}"
+                            class="border px-4 py-2 rounded"
+                        >
+                            Clear
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
     </div>
+
+
+
+    <div class="flex justify-between items-center my-5">
+
+        <h1 class="text-2xl font-bold">
+            Expenses
+        </h1>
+
+        <p class="text-sm text-gray-500">
+            {{ $expenses->total() }} expenses found
+        </p>
+
+    </div>
+
+    {{-- Expense list --}}
 
     @if ($expenses->isEmpty())
         <p>No expenses</p>
