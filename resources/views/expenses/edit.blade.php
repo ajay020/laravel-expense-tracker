@@ -1,61 +1,63 @@
 <x-layouts.app title="Add expense">
 
-    <h1 class="text-2xl mb-6">
-        Edit Expense
-    </h1>
+ <div class="max-w-2xl mx-auto">
 
-    <form method="POST" action="{{  route('expenses.update', $expense) }}">
-        @csrf
-        @method('PATCH')
+    <div class="bg-white rounded-lg border shadow-sm p-6">
 
-        <div class="mb-4">
-            <input type="text" name="title" placeholder="Expense title" value="{{ old('title', $expense->title) }}"
-                class="border p-2 w-full">
+        <h1 class="text-2xl mb-6">
+            Edit Expense
+        </h1>
 
-            @error('title')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+        <form method="POST" action="{{  route('expenses.update', $expense) }}">
+            @csrf
+            @method('PATCH')
 
-        <div class="mb-4">
-            <input type="number" step="0.01" name="amount" placeholder="Amount"
-                value="{{ old('amount', $expense->amount) }}" class="border p-2 w-full">
+             <x-forms.field label="Title">
+                <x-forms.input
+                    name="title"
+                    placeholder="Expense title"
+                    :value="$expense->title"
+                />
+            </x-forms.field>
 
-            @error('amount')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
 
-        <div class="mb-4">
-            <select name="category_id" class="border p-2 w-full" value="{{ old('category_id', $expense->category_id) }}">
-                @foreach($categories as $category)
+            <x-forms.field label="Amount">
+                <x-forms.input
+                    name="amount"
+                    type="number"
+                    placeholder="Expense amount"
+                    :value="$expense->amount"
+                />
+            </x-forms.field>
 
-                    <option value="{{ $category->id }}" {{ old('category_id', $expense->category_id) == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
+            <x-forms.field label="Category">
+                <x-forms.select
+                    :categories="$categories"      
+                    :value="$expense->category_id"               
+                />
+            </x-forms.field>
 
-                @endforeach
-            </select>
+            <x-forms.field label="Date">
+                <x-forms.input
+                    name="expense_date"
+                    type="date"
+                    :value="$expense->expense_date"
+                />
+            </x-forms.field>
 
-            @error('category_id')
-                <p>{{ $message }}</p>
-            @enderror
-        </div>
+            <x-forms.field label="Note">
+                <x-forms.textarea
+                    name="note"
+                    :value="$expense->note"
+                />
+            </x-forms.field>
 
-        <div class="mb-4">
-            <input type="date" name="expense_date" value="{{ old('expense_date', $expense->expense_date) }}"
-                class="border p-2 w-full">
-        </div>
+            <x-forms.button>
+                Save Expense
+            </x-forms.button>
 
-        <div class="mb-4">
-            <textarea name="note" placeholder="Optional note"
-                class="border p-2 w-full">{{ old('note', $expense->note) }}</textarea>
-        </div>
-
-        <button class="bg-black text-white px-4 py-2 rounded">
-            Save Expense
-        </button>
-
-    </form>
+        </form>
+    </div>
+</div>
 
 </x-layouts.app>
