@@ -1,15 +1,20 @@
 <x-layouts.app>
-    <h1 class="text-2xl font-bold mb-4">Categories</h1>
 
-    <a href="{{ route('categories.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add
-        Category</a>
+    <div class="flex gap-2">
+        <h1 class=" text-2xl font-bold mb-4">
+            Categories
+        </h1>
+          <a title="Add category" href="{{ route('categories.create') }}" class="inline-flex gap-2  items-center px-1 py-2 rounded mb-4">
+             <x-round-plus-icon size="7" />
+         </a>
+    </div>
 
     @if($categories->isEmpty())
         <p>No categories found.</p>
     @else
         <ul class="space-y-2">
             @foreach($categories as $category)
-                <li class="flex justify-between items-center bg-gray-100 p-4 rounded">
+                <li class="bg-white rounded shadow flex justify-between items-center p-4">
                     <span>{{ $category->name }}</span>
                     <div>
                         <x-action-buttons
