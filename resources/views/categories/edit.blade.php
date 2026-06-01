@@ -1,16 +1,32 @@
 <x-layouts.app>
-    <h1 class="text-2xl font-bold mb-4">Edit Category</h1>
 
-    <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-4">
-        @csrf
-        @method('PATCH')
+<div class="max-w-2xl mx-auto">
 
-        <div>
-            <label  for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
-            <input type="text" name="name" id="name" required value="{{ old('name', $category->name) }}"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-        </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Category</button>
-    </form>
+    <div class="bg-white rounded-lg border shadow-sm p-6">
+
+        <h1 class="text-2xl font-bold mb-4">Edit Category</h1>
+
+        <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-4">
+            @csrf
+            @method('PATCH')
+
+            <x-forms.field label="Category Name">
+                <x-forms.input
+                    name="name" 
+                    id="name" 
+                    value="{{ old('name', $category->name) }}"
+                    required
+                    placeholder="Enter category name"
+                />
+            </x-forms.field>
+
+            <x-forms.button type="submit">
+                Update Category
+            </x-forms.button>
+
+        </form>
+
+    </div>
+</div>
 
 </x-layouts.app>

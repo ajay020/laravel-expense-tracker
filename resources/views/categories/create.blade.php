@@ -1,24 +1,30 @@
 <x-layouts.app>
+
+<div class="max-w-2xl mx-auto">
+
+    <div class="bg-white rounded-lg border shadow-sm p-6">
+
+
     <h1 class="text-2xl font-bold mb-4">Create Category</h1>
 
     <form action="{{ route('categories.store') }}" method="POST" class="space-y-4">
         @csrf
         
-        <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
-            <input
-                type="text"
+         <x-forms.field label="Category Name">
+            <x-forms.input
                 name="name" 
                 id="name" 
                 required
                 placeholder="Enter category name"
-                class="mt-1 block w-full border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-        </div>
-        <button 
-            type="submit"
-            class="bg-blue-500 text-white px-4 py-2 rounded">
-            Create Category
-        </button>
+            />
+        </x-forms.field>
+
+        <x-forms.button type="submit">
+            Save Category
+        </x-forms.button>
     </form>
+
+    </div>
+</div>
 
 </x-layouts.app>
