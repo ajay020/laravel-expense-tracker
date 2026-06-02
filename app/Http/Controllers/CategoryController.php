@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -13,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = auth()->user()
+        $categories = Auth::user()
             ->categories()
             ->latest()
             ->get();
@@ -36,7 +37,7 @@ class CategoryController extends Controller
     {
         $attributes = $request->validated();
 
-        auth()->user()
+        Auth::user()
             ->categories()
             ->create($attributes);
 
@@ -80,7 +81,7 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
-        $category->delete();
+        $category->delete($category->id );
 
         return redirect('/categories');
     }
